@@ -1,119 +1,126 @@
 using ClientPlugin.Settings;
 using ClientPlugin.Settings.Elements;
+using ClientPlugin.Settings.Tools;
 using Sandbox.Graphics.GUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
-using ClientPlugin.Settings.Tools;
 using VRage.Input;
 using VRageMath;
 
-
 namespace ClientPlugin;
 
-public enum ExampleEnum
+public enum ServerDisplayMode
 {
-    FirstAlpha,
-    SecondBeta,
-    ThirdGamma,
-    AndTheDelta,
-    Epsilon
+    Grid,
+    List,
+    Compact
 }
 
 public class Config : INotifyPropertyChanged
 {
     #region Options
 
-    // TODO: Define your configuration options and their default values
-    private bool toggle = true;
-    private int integer = 2;
-    private float number = 0.1f;
-    private string text = "Default Text";
-    private ExampleEnum dropdown = ExampleEnum.FirstAlpha;
-    private Color color = Color.Cyan;
-    private Color colorWithAlpha = new Color(0.8f, 0.6f, 0.2f, 0.5f);
-    private Binding keybind = new Binding(MyKeys.None);
+    // Star Trek Continuum Launcher configuration options
+    private bool enableCustomVideo = true;
+    private bool showServerPing = true;
+    private string preferredServer = "Federation 1";
+    private ServerDisplayMode serverDisplayMode = ServerDisplayMode.Grid;
+    private Color factionThemeColor = Color.Blue;
+    private bool autoConnectToLastServer = false;
+    private Binding quickConnectKeybind = new Binding(MyKeys.F12);
+    private bool devMode = true;
 
     #endregion
 
     #region User interface
 
-    // TODO: Settings dialog title
-    public readonly string Title = "Config Demo";
+    public readonly string Title = "STC Launcher Settings";
 
-    [Separator("Some settings")]
-        
-    // TODO: Settings dialog controls, one property for each configuration option
+    // Star Trek Continuum Launcher settings controls
 
-    [Checkbox(description: "Checkbox Tooltip")]
-    public bool Toggle
+    [Checkbox(description: "Enable custom Star Trek background video")]
+    public bool EnableCustomVideo
     {
-        get => toggle;
-        set => SetField(ref toggle, value);
+        get => enableCustomVideo;
+        set => SetField(ref enableCustomVideo, value);
     }
 
-    [Slider(-1f, 10f, 1f, SliderAttribute.SliderType.Integer, description: "Integer Slider Tooltip")]
-    public int Integer
+    [Checkbox(description: "Show server ping information in server selection dialog")]
+    public bool ShowServerPing
     {
-        get => integer;
-        set => SetField(ref integer, value);
+        get => showServerPing;
+        set => SetField(ref showServerPing, value);
     }
 
-    [Slider(-5f, 4.5f, 0.5f, SliderAttribute.SliderType.Float, description: "Float Slider Tooltip")]
-    public float Number
+    [Textbox(description: "Preferred server name for quick connect")]
+    public string PreferredServer
     {
-        get => number;
-        set => SetField(ref number, value);
+        get => preferredServer;
+        set => SetField(ref preferredServer, value);
     }
 
-    [Textbox(description: "Textbox Tooltip")]
-    public string Text
+    [Dropdown(description: "How servers are displayed in the selection dialog")]
+    public ServerDisplayMode ServerDisplayMode
     {
-        get => text;
-        set => SetField(ref text, value);
+        get => serverDisplayMode;
+        set => SetField(ref serverDisplayMode, value);
     }
 
-    [Dropdown(description: "Dropdown Tooltip")]
-    public ExampleEnum Dropdown
+    [Color(description: "Theme color for faction buttons")]
+    public Color FactionThemeColor
     {
-        get => dropdown;
-        set => SetField(ref dropdown, value);
+        get => factionThemeColor;
+        set => SetField(ref factionThemeColor, value);
     }
 
-    [Separator("More settings")]
-        
-    [Color(description: "RGB color")]
-    public Color Color
+    [Checkbox(description: "Automatically connect to the last used server")]
+    public bool AutoConnectToLastServer
     {
-        get => color;
-        set => SetField(ref color, value);
+        get => autoConnectToLastServer;
+        set => SetField(ref autoConnectToLastServer, value);
     }
 
-    [Color(hasAlpha: true, description: "RGBA color")]
-    public Color ColorWithAlpha
+    [Keybind(description: "Hotkey to quickly open server selection dialog")]
+    public Binding QuickConnectKeybind
     {
-        get => colorWithAlpha;
-        set => SetField(ref colorWithAlpha, value);
+        get => quickConnectKeybind;
+        set => SetField(ref quickConnectKeybind, value);
     }
 
-    [Keybind(description: "Keybind Tooltip - Unbind by right clicking the button")]
-    public Binding Keybind
+    [Checkbox(description: "Enable development mode to show dev server options")]
+    public bool DevMode
     {
-        get => keybind;
-        set => SetField(ref keybind, value);
+        get => devMode;
+        set => SetField(ref devMode, value);
     }
 
-    [Button(description: "Button Tooltip")]
-    public void Button()
+    [Button(description: "Open the Star Trek Continuum server selection dialog")]
+    public void OpenServerSelection()
     {
-        MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(
-            MyMessageBoxStyleEnum.Info,
-            buttonType: MyMessageBoxButtonsType.OK,
-            messageText: new StringBuilder("You clicked me!"),
-            messageCaption: new StringBuilder("Custom Button Function"),
-            size: new Vector2(0.6f, 0.5f)
-        ));
+        MyGuiSandbox.AddScreen(new GUI.ServerSelectionDialog());
+    }
+
+    [Button(description: "Open the custom video assets folder")]
+    public void OpenAssetsFolder()
+    {
+        try
+        {
+            var assetsPath = Assets.AssetLoader.VideosFolderPath;
+            System.Diagnostics.Process.Start("explorer.exe", assetsPath);
+        }
+        catch (Exception ex)
+        {
+            MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(
+                MyMessageBoxStyleEnum.Error,
+                buttonType: MyMessageBoxButtonsType.OK,
+                messageText: new StringBuilder($"Failed to open assets folder:\n{ex.Message}"),
+                messageCaption: new StringBuilder("Error"),
+                size: new Vector2(0.6f, 0.4f)
+            ));
+        }
     }
 
     #endregion

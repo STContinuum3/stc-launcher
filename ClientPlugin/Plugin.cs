@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using ClientPlugin.Settings;
 using ClientPlugin.Settings.Layouts;
 using HarmonyLib;
@@ -10,13 +10,13 @@ using VRage.Plugins;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 #endif
-    
+
 namespace ClientPlugin;
 
 // ReSharper disable once UnusedType.Global
 public class Plugin : IPlugin
 {
-    public const string Name = "ClientPluginTemplate";
+    public const string Name = "StcMenu";
     public static Plugin Instance { get; private set; }
     private SettingsGenerator settingsGenerator;
 
@@ -24,11 +24,32 @@ public class Plugin : IPlugin
     public void Init(object gameInstance)
     {
         Instance = this;
-        Instance.settingsGenerator = new SettingsGenerator();
 
-        // TODO: Put your one time initialization code here.
-        var harmony = new Harmony(Name);
-        harmony.PatchAll(Assembly.GetExecutingAssembly());
+        VRage.Utils.MyLog.Default.WriteLine($"STCLauncher: Initializing plugin v1.0");
+
+        try
+        {
+            // Initialize settings
+            Instance.settingsGenerator = new SettingsGenerator();
+            VRage.Utils.MyLog.Default.WriteLine($"STCLauncher: Settings initialized");
+
+            // Apply Harmony patches
+            var harmony = new Harmony(Name);
+            harmony.PatchAll(Assembly.GetExecutingAssembly());
+            VRage.Utils.MyLog.Default.WriteLine($"STCLauncher: Harmony patches applied successfully");
+
+            // Initialize assets early
+            Assets.AssetLoader.LoadAssets();
+            VRage.Utils.MyLog.Default.WriteLine($"STCLauncher: Assets loaded");
+
+            // The menu background video is installed by Patches.MainMenuBackgroundPatch.
+            // It cannot be done here: SpaceEngineersGame.SetupPerGameSettings() runs after
+            // Pulsar initialises plugins and would overwrite anything set at this point.
+        }
+        catch (System.Exception ex)
+        {
+            VRage.Utils.MyLog.Default.WriteLine($"STCLauncher: Error during initialization: {ex}");
+        }
     }
 
     public void Dispose()
@@ -41,7 +62,7 @@ public class Plugin : IPlugin
 
     public void Update()
     {
-        // TODO: Put your update code here. It is called on every simulation frame!
+        // The game owns the background video screen now, including its volume and cleanup.
     }
 
     // ReSharper disable once UnusedMember.Global
@@ -51,9 +72,8 @@ public class Plugin : IPlugin
         MyGuiSandbox.AddScreen(Instance.settingsGenerator.Dialog);
     }
 
-    //TODO: Uncomment and use this method to load asset files
-    /*public void LoadAssets(string folder)
+    public void LoadAssets(string folder)
     {
-
-    }*/
+        Assets.AssetLoader.LoadAssets(folder);
+    }
 }

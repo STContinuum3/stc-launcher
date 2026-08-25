@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <RootNamespace>ClientPlugin</RootNamespace>
-    <AssemblyName>ClientPluginTemplate</AssemblyName>
+    <AssemblyName>StcMenu</AssemblyName>
     <LangVersion>14</LangVersion>
       
     <!-- Target platforms on Windows and Linux -->
@@ -258,6 +258,11 @@
       <HintPath>$(Bin64Dir)VRage.XmlSerializers.dll</HintPath>
       <Private>False</Private>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Background video for the main menu, extracted at runtime by Assets.AssetLoader -->
+    <EmbeddedResource Include="Resources$(PathSeparator)star_trek_background.wmv" />
   </ItemGroup>
 
   <ItemGroup>
