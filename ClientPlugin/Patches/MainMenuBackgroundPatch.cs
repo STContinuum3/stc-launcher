@@ -34,7 +34,23 @@ internal static class MainMenuBackgroundPatch
     /// <summary>The background screen running our video, or null when the stock one is up.</summary>
     internal static MyGuiScreenIntroVideo ActiveScreen;
 
-    private static float MusicVolume => MyAudio.Static?.VolumeMusic ?? 0f;
+    /// <summary>
+    /// How much louder than the music slider to play the video's soundtrack.
+    ///
+    /// On Windows the video runs through DirectShow, whose IBasicAudio volume is expressed
+    /// in hundredths of a decibel from -10000 (-100 dB, silent) to 0 (0 dB). VRage maps that
+    /// onto 0..1 as put_Volume((value - 1) * 10000), so 1.0 IS the file's native level and
+    /// the API cannot amplify past it. Boosting therefore scales the level up that curve and
+    /// clamps at native, which means the slider reaches full volume early: at this multiplier
+    /// anything from roughly 1/boost upwards already plays at 0 dB.
+    ///
+    /// Note the scale is linear in decibels, so a given multiplier is a larger change than it
+    /// looks - at a 0.5 music slider, 1.5x moves -50 dB to -25 dB.
+    /// </summary>
+    private const float SoundtrackBoost = 1.50f;
+
+    private static float SoundtrackVolume =>
+        Math.Min(1f, (MyAudio.Static?.VolumeMusic ?? 0f) * SoundtrackBoost);
 
     [HarmonyPrefix]
     [HarmonyPatch("LoadContent")]
@@ -69,7 +85,7 @@ internal static class MainMenuBackgroundPatch
         // CreateBackgroundScreen hardcodes volume 0 because stock menu videos are silent
         // wallpaper. Ours has a soundtrack, so play it at the player's music volume and keep
         // the stock menu track out of its way (see MenuMusicPatch).
-        ___m_volume = MusicVolume;
+        ___m_volume = SoundtrackVolume;
         ActiveScreen = __instance;
         MyAudio.Static?.StopMusic();
 
@@ -88,7 +104,7 @@ internal static class MainMenuBackgroundPatch
         if (__instance.State == MyGuiScreenState.CLOSING)
             return;
 
-        var volume = MusicVolume;
+        var volume = SoundtrackVolume;
         if (Math.Abs(volume - ___m_volume) < 0.001f)
             return;
 

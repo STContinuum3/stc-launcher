@@ -22,7 +22,7 @@ public class DevServerSelectionDialog : MyGuiScreenBase
     public DevServerSelectionDialog() : base(
         position: new Vector2(0.5f, 0.5f),
         backgroundColor: MyGuiConstants.SCREEN_BACKGROUND_COLOR,
-        size: new Vector2(0.5f, 0.55f))
+        size: new Vector2(0.5f, 0.7f))
     {
         EnabledBackgroundFade = true;
         m_closeOnEsc = true;
@@ -34,13 +34,21 @@ public class DevServerSelectionDialog : MyGuiScreenBase
         RecreateControls(true);
     }
 
+    // Layout. Controls use a centred origin, so a position is the middle of the control.
+    private const float ButtonWidth = 0.35f;
+    private const float ButtonHeight = 0.07f;
+    private const float RowSpacing = ButtonHeight + 0.015f;
+    private const float ListTop = -0.09f;
+    private const float CloseButtonHeight = 0.06f;
+    private const float SectionGap = 0.04f;
+
     public override void RecreateControls(bool constructor)
     {
         base.RecreateControls(constructor);
 
         // Title
         var title = new MyGuiControlLabel(
-            position: new Vector2(0f, -0.22f),
+            position: new Vector2(0f, -0.29f),
             text: "Development Servers",
             textScale: 1.2f,
             colorMask: Color.Orange,
@@ -50,7 +58,7 @@ public class DevServerSelectionDialog : MyGuiScreenBase
 
         // Warning subtitle
         var warning = new MyGuiControlLabel(
-            position: new Vector2(0f, -0.16f),
+            position: new Vector2(0f, -0.235f),
             text: "⚠ FOR TESTING ONLY ⚠",
             textScale: 0.9f,
             colorMask: Color.OrangeRed,
@@ -60,7 +68,7 @@ public class DevServerSelectionDialog : MyGuiScreenBase
 
         // Subtitle
         var subtitle = new MyGuiControlLabel(
-            position: new Vector2(0f, -0.10f),
+            position: new Vector2(0f, -0.18f),
             text: "Select a development server:",
             textScale: 0.9f,
             colorMask: Color.LightGray,
@@ -69,23 +77,21 @@ public class DevServerSelectionDialog : MyGuiScreenBase
         Controls.Add(subtitle);
 
         // Server buttons in a single column
-        const float buttonWidth = 0.35f;
-        const float buttonHeight = 0.07f;
-        const float verticalSpacing = 0.075f;
-
-        Vector2 startPosition = new Vector2(0f, 0f);
+        var buttonSize = new Vector2(ButtonWidth, ButtonHeight);
 
         for (int i = 0; i < devServers.Length; i++)
         {
-            Vector2 buttonPosition = startPosition + new Vector2(0f, i * verticalSpacing);
-            var serverButton = CreateServerButton(devServers[i], buttonPosition, new Vector2(buttonWidth, buttonHeight));
-            Controls.Add(serverButton);
+            var buttonPosition = new Vector2(0f, ListTop + i * RowSpacing);
+            Controls.Add(CreateServerButton(devServers[i], buttonPosition, buttonSize));
         }
 
-        // Close button
+        // Close button, placed below the last server rather than at a fixed offset, so that
+        // adding servers can never park one on top of it.
+        var listBottom = ListTop + (devServers.Length - 1) * RowSpacing + ButtonHeight / 2f;
+
         var closeButton = new MyGuiControlButton(
-            position: new Vector2(0f, 0.22f),
-            size: new Vector2(0.2f, 0.06f),
+            position: new Vector2(0f, listBottom + SectionGap + CloseButtonHeight / 2f),
+            size: new Vector2(0.2f, CloseButtonHeight),
             text: new StringBuilder("Close"),
             onButtonClick: OnCloseClick,
             visualStyle: MyGuiControlButtonStyleEnum.Default

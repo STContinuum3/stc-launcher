@@ -39,13 +39,22 @@ public class ServerSelectionDialog : MyGuiScreenBase
         RecreateControls(true);
     }
 
+    // Layout. Controls use a centred origin, so a position is the middle of the control.
+    private const float ButtonWidth = 0.22f;
+    private const float ButtonHeight = 0.07f;
+    private const float ColumnSpacing = 0.24f;
+    private const float RowSpacing = ButtonHeight + 0.015f;
+    private const float GridTop = -0.055f;
+    private const float CloseButtonHeight = 0.06f;
+    private const float SectionGap = 0.04f;
+
     public override void RecreateControls(bool constructor)
     {
         base.RecreateControls(constructor);
 
         // Title
         var title = new MyGuiControlLabel(
-            position: new Vector2(0f, -0.28f),
+            position: new Vector2(0f, -0.32f),
             text: "Star Trek Continuum Servers",
             textScale: 1.2f,
             originAlign: MyGuiDrawAlignEnum.HORISONTAL_CENTER_AND_VERTICAL_CENTER
@@ -54,7 +63,7 @@ public class ServerSelectionDialog : MyGuiScreenBase
 
         // Subtitle
         var subtitle = new MyGuiControlLabel(
-            position: new Vector2(0f, -0.22f),
+            position: new Vector2(0f, -0.26f),
             text: "Select a server to connect to:",
             textScale: 0.9f,
             colorMask: Color.LightGray,
@@ -63,35 +72,31 @@ public class ServerSelectionDialog : MyGuiScreenBase
         Controls.Add(subtitle);
 
         // Lobby button - centered above the grid
-        var lobbyButton = CreateServerButton(lobbyServer, new Vector2(0f, -0.12f), new Vector2(0.35f, 0.08f));
+        var lobbyButton = CreateServerButton(lobbyServer, new Vector2(0f, -0.185f), new Vector2(0.35f, ButtonHeight));
         Controls.Add(lobbyButton);
 
-        // Server buttons in a 2x4 grid
-        const float buttonWidth = 0.22f;
-        const float buttonHeight = 0.08f;
-        const float horizontalSpacing = 0.25f;
-        const float verticalSpacing = 0.1f;
-
-        Vector2 startPosition = new Vector2(-horizontalSpacing / 2f, -0.01f);
+        // Server buttons in a two column grid
+        var buttonSize = new Vector2(ButtonWidth, ButtonHeight);
+        var gridOrigin = new Vector2(-ColumnSpacing / 2f, GridTop);
 
         for (int i = 0; i < servers.Length; i++)
         {
-            int row = i / 2;
-            int col = i % 2;
-
-            Vector2 buttonPosition = startPosition + new Vector2(
-                col * horizontalSpacing,
-                row * verticalSpacing
+            var buttonPosition = gridOrigin + new Vector2(
+                (i % 2) * ColumnSpacing,
+                (i / 2) * RowSpacing
             );
 
-            var serverButton = CreateServerButton(servers[i], buttonPosition, new Vector2(buttonWidth, buttonHeight));
-            Controls.Add(serverButton);
+            Controls.Add(CreateServerButton(servers[i], buttonPosition, buttonSize));
         }
 
-        // Close button
+        // Close button, placed below the last grid row rather than at a fixed offset, so
+        // that adding servers can never park a row on top of it.
+        var rowCount = (servers.Length + 1) / 2;
+        var gridBottom = GridTop + (rowCount - 1) * RowSpacing + ButtonHeight / 2f;
+
         var closeButton = new MyGuiControlButton(
-            position: new Vector2(0f, 0.33f),
-            size: new Vector2(0.2f, 0.06f),
+            position: new Vector2(0f, gridBottom + SectionGap + CloseButtonHeight / 2f),
+            size: new Vector2(0.2f, CloseButtonHeight),
             text: new StringBuilder("Close"),
             onButtonClick: OnCloseClick,
             visualStyle: MyGuiControlButtonStyleEnum.Default
