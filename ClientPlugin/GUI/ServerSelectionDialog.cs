@@ -18,9 +18,9 @@ public class ServerSelectionDialog : MyGuiScreenBase
         new ServerInfo("Federation 2", "142.127.79.145", 27262, Color.Blue),
         new ServerInfo("Klingon 1", "142.127.79.145", 27263, Color.Red),
         new ServerInfo("Klingon 2", "142.127.79.145", 27264, Color.Red),
-        new ServerInfo("Romulan 1", "142.127.79.145", 27265, Color.Green),
-        new ServerInfo("Romulan 2", "142.127.79.145", 27266, Color.Green),
-        new ServerInfo("Core", "142.127.79.145", 27267, Color.Yellow),
+        //new ServerInfo("Romulan 1", "142.127.79.145", 27265, Color.Green),
+        //new ServerInfo("Romulan 2", "142.127.79.145", 27266, Color.Green),
+        //new ServerInfo("Core", "142.127.79.145", 27267, Color.Yellow),
         new ServerInfo("Deep Space", "142.127.79.145", 27268, Color.Purple)
     };
 
