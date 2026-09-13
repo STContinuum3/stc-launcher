@@ -29,8 +29,9 @@
         <Directory>ClientPlugin</Directory>
     </SourceDirectories>
 
-    <!-- To specify asset files to be copied onto disk, use the AssetFolder tag.
-    <AssetFolder>Project/Assets/</AssetFolder> -->
+    <!-- Main menu background video. Pulsar compiles plugins from source without embedded
+         resources, so the video ships as an asset: this folder is passed to Plugin.LoadAssets. -->
+    <Asset Name="AssetFolder" Path="ClientPlugin/Resources" />
 
     <!-- To specify a required NuGet package, use either a list of PackageReference tags OR a Config tag.
     <NuGetReferences>
@@ -68,12 +69,6 @@
     </AlternateVersions> 
     -->
     
-    <!-- Assets
-    <Asset Name="AssetFolder" Path="Fixtures/folder"/>
-    <Asset Name="RemoteArchive" Url="https://example.com/archive.zip" Sha256="..." Extract="true"/>
-    <Asset Name="RemoteReference" Url="https://example.com/AssemblyFileName.dll" Sha256="..." FileName="CustomName.dll" Reference="true"/>
-    -->
-
     <!-- Feel free to delete the comments and the commented out optional blocks once you're done. -->
 
 </PluginData>

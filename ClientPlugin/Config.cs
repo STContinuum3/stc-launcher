@@ -1,9 +1,6 @@
 using ClientPlugin.Settings;
 using ClientPlugin.Settings.Elements;
 using Sandbox.Graphics.GUI;
-using System;
-using System.Text;
-using VRageMath;
 
 namespace ClientPlugin;
 
@@ -23,25 +20,5 @@ public class Config
     public void OpenServerSelection()
     {
         MyGuiSandbox.AddScreen(new GUI.ServerSelectionDialog());
-    }
-
-    [Button(description: "Open the custom video assets folder")]
-    public void OpenAssetsFolder()
-    {
-        try
-        {
-            var assetsPath = Assets.AssetLoader.VideosFolderPath;
-            System.Diagnostics.Process.Start("explorer.exe", assetsPath);
-        }
-        catch (Exception ex)
-        {
-            MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(
-                MyMessageBoxStyleEnum.Error,
-                buttonType: MyMessageBoxButtonsType.OK,
-                messageText: new StringBuilder($"Failed to open assets folder:\n{ex.Message}"),
-                messageCaption: new StringBuilder("Error"),
-                size: new Vector2(0.6f, 0.4f)
-            ));
-        }
     }
 }

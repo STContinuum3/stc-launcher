@@ -261,11 +261,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Background video for the main menu, extracted at runtime by Assets.AssetLoader -->
-    <EmbeddedResource Include="Resources$(PathSeparator)star_trek_background.wmv" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" />
   </ItemGroup>
 

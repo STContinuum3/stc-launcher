@@ -34,10 +34,6 @@ public class Plugin : IPlugin
             harmony.PatchAll(Assembly.GetExecutingAssembly());
             VRage.Utils.MyLog.Default.WriteLine($"STCLauncher: Harmony patches applied successfully");
 
-            // Initialize assets early
-            Assets.AssetLoader.LoadAssets();
-            VRage.Utils.MyLog.Default.WriteLine($"STCLauncher: Assets loaded");
-
             // The menu background video is installed by Patches.MainMenuBackgroundPatch.
             // It cannot be done here: SpaceEngineersGame.SetupPerGameSettings() runs after
             // Pulsar initialises plugins and would overwrite anything set at this point.
@@ -65,6 +61,8 @@ public class Plugin : IPlugin
         MyGuiSandbox.AddScreen(settingsGenerator.Dialog);
     }
 
+    // ReSharper disable once UnusedMember.Global
+    // Called by Pulsar before Init with the folder of the "AssetFolder" asset from StcMenu.xml
     public void LoadAssets(string folder)
     {
         Assets.AssetLoader.LoadAssets(folder);

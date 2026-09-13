@@ -66,16 +66,16 @@ internal static class MainMenuBackgroundPatch
         if (!Config.Current.EnableCustomVideo)
             return;
 
-        var videos = AssetLoader.GetCustomVideoFiles();
-        if (videos.Length == 0)
+        var videoPath = AssetLoader.VideoPath;
+        if (videoPath == null)
         {
             MyLog.Default.Warning("STCLauncher: No custom video available, keeping stock menu backgrounds");
             return;
         }
 
         // TryPlayVideo does Path.Combine(ContentPath, entry), which returns the entry
-        // unchanged when it is already rooted - so our absolute paths work.
-        ___m_videos = videos;
+        // unchanged when it is already rooted - so our absolute path works.
+        ___m_videos = new[] { videoPath };
 
         // While ShowPictures is set the screen draws static loading images and never calls
         // TryPlayVideo. The game turns it on for Steam Deck; force it off so the video plays
@@ -89,7 +89,7 @@ internal static class MainMenuBackgroundPatch
         ActiveScreen = __instance;
         MyAudio.Static.StopMusic();
 
-        MyLog.Default.Info($"STCLauncher: Main menu background video replaced with {videos[0]} (volume {___m_volume:0.00})");
+        MyLog.Default.Info($"STCLauncher: Main menu background video replaced with {videoPath} (volume {___m_volume:0.00})");
     }
 
     [HarmonyPostfix]
