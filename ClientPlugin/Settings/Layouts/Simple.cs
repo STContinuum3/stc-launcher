@@ -1,4 +1,4 @@
-﻿using Sandbox.Graphics.GUI;
+using Sandbox.Graphics.GUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,18 +8,29 @@ using VRageMath;
 
 namespace ClientPlugin.Settings.Layouts;
 
-internal class Simple : Layout
+internal class Simple
 {
+    public static readonly Vector2 SettingsPanelSize = new Vector2(0.5f, 0.7f);
+    private const float ElementPadding = 0.01f;
+
+    private readonly Func<List<List<Control>>> getControls;
+    private List<List<Control>> controls;
     private MyGuiControlParent parent;
     private MyGuiControlScrollablePanel scrollPanel;
 
-    public override Vector2 SettingsPanelSize => new Vector2(0.5f, 0.7f);
-    private const float ElementPadding = 0.01f;
-
-    public Simple(Func<List<List<Control>>> getControls) : base(getControls) { }
-
-    public override List<MyGuiControlBase> RecreateControls()
+    public Simple(Func<List<List<Control>>> getControls)
     {
+        this.getControls = getControls;
+    }
+
+    /// <summary>
+    /// Builds a fresh set of controls inside a scroll panel and lays them out.
+    /// </summary>
+    /// <returns>Controls to be parented to the screen.</returns>
+    public List<MyGuiControlBase> RecreateControls()
+    {
+        controls = getControls();
+
         parent = new MyGuiControlParent()
         {
             OriginAlign = MyGuiDrawAlignEnum.HORISONTAL_CENTER_AND_VERTICAL_TOP,
@@ -41,7 +52,7 @@ internal class Simple : Layout
             DrawScrollBarSeparator = true,
         };
 
-        foreach (var row in GetControls())
+        foreach (var row in controls)
         {
             foreach (var control in row)
             {
@@ -49,12 +60,12 @@ internal class Simple : Layout
             }
         }
 
+        LayoutControls();
         return new List<MyGuiControlBase> { scrollPanel };
     }
 
-    public override void LayoutControls()
+    private void LayoutControls()
     {
-        var controls = GetControls();
         var totalHeight = ElementPadding + controls.Select(row => row.Max(c => c.GuiControl.Size.Y) + ElementPadding).Sum();
         parent.Size = new Vector2(parent.Size.X, totalHeight);
             

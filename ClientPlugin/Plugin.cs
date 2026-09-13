@@ -1,6 +1,5 @@
 using System.Reflection;
 using ClientPlugin.Settings;
-using ClientPlugin.Settings.Layouts;
 using HarmonyLib;
 using Sandbox.Graphics.GUI;
 using VRage.Plugins;
@@ -63,7 +62,6 @@ public class Plugin : IPlugin
     // ReSharper disable once UnusedMember.Global
     public void OpenConfigDialog()
     {
-        settingsGenerator.SetLayout<Simple>();
         MyGuiSandbox.AddScreen(settingsGenerator.Dialog);
     }
 
