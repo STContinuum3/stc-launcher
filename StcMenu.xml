@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<PluginData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="GitHubPlugin">
+
+    <!-- The ID of the plugin, never change this -->
+    <Id>CC2344F5-02BB-409E-ADE4-2B800DF06D36</Id>
+
+    <RepoId>STContinuum3/stc-launcher</RepoId>
+
+    <FriendlyName>Star Trek Continuum 4.1 - Menu System</FriendlyName>
+    <Author>Sargonnas</Author>
+    <Tooltip>Adds STC specific menu items and background video.</Tooltip>
+
+    <!-- Shown on the plugin details panel, 1000 characters max. Defaults to the Tooltip. -->
+    <Description>Adds STC specific buttons to launch game directly into a sector, adds new background video, removes keen news from main menu.</Description>
+
+    <!-- Only source code in these directories is compiled -->
+    <SourceDirectories>
+        <Directory>ClientPlugin</Directory>
+    </SourceDirectories>
+
+    <!-- Main menu background video. Pulsar compiles plugins from source without embedded
+         resources, so the video ships as an asset: this folder is passed to Plugin.LoadAssets. -->
+    <Asset Name="AssetFolder" Path="ClientPlugin/Resources" />
+
+    <!-- The released commit hash -->
+    <Commit>TODO Git commit hash</Commit>
+
+</PluginData>

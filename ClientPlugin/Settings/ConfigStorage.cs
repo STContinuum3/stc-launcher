@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 using VRage.FileSystem;
-using VRage.Utils;
 
 namespace ClientPlugin.Settings;
 
@@ -24,21 +23,20 @@ public static class ConfigStorage
         var path = ConfigFilePath;
         if (!File.Exists(path))
         {
-            return Config.Default;
+            return new Config();
         }
 
         var xmlSerializer = new XmlSerializer(typeof(Config));
         try
         {
             using (var streamReader = File.OpenText(path))
-                return (Config)xmlSerializer.Deserialize(streamReader) ?? Config.Default;
+                return (Config)xmlSerializer.Deserialize(streamReader);
         }
         catch (Exception)
         {
-            MyLog.Default.Warning($"{ConfigFileName}: Failed to read config file: {ConfigFilePath}");
+            Log.Warning($"Failed to read config file: {ConfigFilePath}");
         }
-            
-        return Config.Default;
+
+        return new Config();
     }
-        
 }

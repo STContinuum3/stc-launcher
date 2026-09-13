@@ -1,59 +1,56 @@
-﻿using System.Reflection;
 using ClientPlugin.Settings;
-using ClientPlugin.Settings.Layouts;
 using HarmonyLib;
 using Sandbox.Graphics.GUI;
 using VRage.Plugins;
 
-// Define assembly version when compiled by Pulsar
+// Pulsar compiles the plugin from source without MSBuild, so the version is defined here for it.
+// MSBuild builds define LOCAL_BUILD and take the version from Version.Build.props instead.
 #if !LOCAL_BUILD
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.0.0.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.0.0.0")]
 #endif
-    
+
 namespace ClientPlugin;
 
 // ReSharper disable once UnusedType.Global
 public class Plugin : IPlugin
 {
-    public const string Name = "ClientPluginTemplate";
-    public static Plugin Instance { get; private set; }
+    public const string Name = "StcMenu";
     private SettingsGenerator settingsGenerator;
 
-    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
     public void Init(object gameInstance)
     {
-        Instance = this;
-        Instance.settingsGenerator = new SettingsGenerator();
-
-        // TODO: Put your one time initialization code here.
-        var harmony = new Harmony(Name);
-        harmony.PatchAll(Assembly.GetExecutingAssembly());
+        try
+        {
+            settingsGenerator = new SettingsGenerator();
+            new Harmony(Name).PatchAll(typeof(Plugin).Assembly);
+            Log.Info("Initialized");
+        }
+        catch (System.Exception ex)
+        {
+            Log.Error($"Error during initialization: {ex}");
+        }
     }
 
     public void Dispose()
     {
-        // TODO: Save state and close resources here, called when the game exits (not guaranteed!)
-        // IMPORTANT: Do NOT call harmony.UnpatchAll() here! It may break other plugins.
-
-        Instance = null;
+        // Do NOT call harmony.UnpatchAll() here! It may break other plugins.
     }
 
     public void Update()
     {
-        // TODO: Put your update code here. It is called on every simulation frame!
     }
 
     // ReSharper disable once UnusedMember.Global
     public void OpenConfigDialog()
     {
-        Instance.settingsGenerator.SetLayout<Simple>();
-        MyGuiSandbox.AddScreen(Instance.settingsGenerator.Dialog);
+        MyGuiSandbox.AddScreen(settingsGenerator.Dialog);
     }
 
-    //TODO: Uncomment and use this method to load asset files
-    /*public void LoadAssets(string folder)
+    // ReSharper disable once UnusedMember.Global
+    // Called by Pulsar before Init with the folder of the "AssetFolder" asset from StcMenu.xml
+    public void LoadAssets(string folder)
     {
-
-    }*/
+        Assets.AssetLoader.LoadAssets(folder);
+    }
 }
