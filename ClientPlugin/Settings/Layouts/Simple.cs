@@ -72,7 +72,7 @@ internal class Simple : Layout
                 
             // Horizontal
                 
-            var totalMinWidth = row.Select(c => (c.FixedWidth ?? c.MinWidth) + c.RightMargin).Sum();
+            var totalMinWidth = row.Select(c => c.FixedWidth ?? c.MinWidth).Sum();
             var remainingWidth = Math.Max(0f, totalWidth - totalMinWidth);
             var sumFillFactors = row.Select(c => c.FixedWidth.HasValue ? 0f : c.FillFactor ?? 0f).Sum();
             var unitWidth = sumFillFactors > 0f ? remainingWidth / sumFillFactors : 0f;
@@ -99,7 +99,7 @@ internal class Simple : Layout
                     guiControl.Size = new Vector2(Math.Max(guiControl.Size.X, control.MinWidth), sizeY);
                 }
 
-                controlX += guiControl.Size.X + control.RightMargin;
+                controlX += guiControl.Size.X;
             }
         }
             
