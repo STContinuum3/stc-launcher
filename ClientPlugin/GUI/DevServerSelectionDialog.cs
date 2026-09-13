@@ -13,10 +13,10 @@ public class DevServerSelectionDialog : MyGuiScreenBase
     // Development servers list
     private readonly ServerInfo[] devServers = new ServerInfo[]
     {
-        new ServerInfo("DEV Lobby", "142.127.79.145", 27254, Color.Orange),
-        new ServerInfo("DEV Fed 1", "142.127.79.145", 27255, Color.Orange),
-        new ServerInfo("Dev Fed 2", "142.127.79.145", 27252, Color.Orange),
-        new ServerInfo("Dev Deep Space", "142.127.79.145", 27253, Color.Orange)
+        new ServerInfo("Dev Lobby", "142.127.79.145", 27900, Color.Orange),
+        new ServerInfo("Dev Fed 1", "142.127.79.145", 27901, Color.Orange),
+        new ServerInfo("Dev Fed 2", "142.127.79.145", 27902, Color.Orange),
+        new ServerInfo("Dev Deep Space", "142.127.79.145", 27903, Color.Orange)
     };
 
     public DevServerSelectionDialog() : base(
