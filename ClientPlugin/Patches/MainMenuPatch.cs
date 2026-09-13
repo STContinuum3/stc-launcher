@@ -9,95 +9,50 @@ using VRageMath;
 
 namespace ClientPlugin.Patches;
 
+/// <summary>
+/// Adds an STC Servers button to the right of the main menu's New Game button and, in dev
+/// mode, an STC Dev Servers button below it.
+/// </summary>
 [HarmonyPatch(typeof(MyGuiScreenMainMenu), "RecreateControls")]
-internal class MainMenuPatch
+internal static class MainMenuPatch
 {
+    private const float ButtonSpacing = 0.003f;
+
     private static void Postfix(MyGuiScreenMainMenu __instance, bool constructor)
     {
         try
         {
-            MyLog.Default.Info("STCLauncher: MainMenuPatch.Postfix called");
-
             if (!constructor)
-            {
-                MyLog.Default.Info("STCLauncher: Not constructor, returning");
                 return;
-            }
 
-            // Find the "New Game" button to position our button next to it
             MyGuiControlButton newGameButton = null;
-            MyLog.Default.Info($"STCLauncher: Searching for New Game button among {__instance.Controls.Count} controls");
-
             foreach (var control in __instance.Controls.GetVisibleControls())
             {
-                if (control is MyGuiControlButton button)
+                if (control is MyGuiControlButton button && button.Text != null &&
+                    (button.Text.ToString().Contains("New Game") ||
+                     button.Text.ToString().Contains("NEW GAME") ||
+                     button.Text.ToString().Contains("New World")))
                 {
-                    MyLog.Default.Info($"STCLauncher: Found button with text: {button.Text?.ToString() ?? "null"}");
-                    if (button.Text != null &&
-                        (button.Text.ToString().Contains("New Game") ||
-                         button.Text.ToString().Contains("NEW GAME") ||
-                         button.Text.ToString().Contains("New World")))
-                    {
-                        newGameButton = button;
-                        MyLog.Default.Info($"STCLauncher: Found New Game button at position {button.Position}");
-                        break;
-                    }
+                    newGameButton = button;
+                    break;
                 }
             }
 
-            if (newGameButton != null)
+            // The in-game pause menu has no New Game button, so it gets no STC buttons
+            if (newGameButton == null)
+                return;
+
+            var position = newGameButton.Position + new Vector2(newGameButton.Size.X + ButtonSpacing, 0f);
+            __instance.Controls.Add(CreateButton(newGameButton, position,
+                "STC Servers", "Connect to Star Trek Continuum servers", newGameButton.ColorMask,
+                () => new ServerSelectionDialog()));
+
+            if (Config.Current.DevMode)
             {
-                // Calculate position to the right of the New Game button
-                // Adjust X position by button width plus spacing
-                float buttonSpacing = 0.003f; // Small spacing between buttons
-                Vector2 buttonPosition = newGameButton.Position + new Vector2(newGameButton.Size.X + buttonSpacing, 0f);
-
-                MyLog.Default.Info($"STCLauncher: Creating STC button at position {buttonPosition}");
-
-                // Create the Star Trek Continuum button with slightly smaller size to fit
-                var stcButton = new MyGuiControlButton(
-                    position: buttonPosition,
-                    size: newGameButton.Size * new Vector2(0.9f, 1f), // Slightly narrower to fit
-                    text: new StringBuilder("STC Servers"),
-                    onButtonClick: OnStarTrekContinuumClick,
-                    toolTip: "Connect to Star Trek Continuum servers",
-                    textScale: newGameButton.TextScale * 0.9f, // Slightly smaller text
-                    visualStyle: newGameButton.VisualStyle,
-                    colorMask: newGameButton.ColorMask
-                );
-
-                // Add the button to the screen
-                __instance.Controls.Add(stcButton);
-                MyLog.Default.Info("STCLauncher: STC button added to main menu");
-
-                // Add Dev Servers button if DevMode is enabled
-                if (Config.Current.DevMode)
-                {
-                    MyLog.Default.Info("STCLauncher: DevMode is enabled, adding Dev Servers button");
-
-                    // Calculate position below the STC Servers button
-                    float devButtonSpacing = 0.003f; // Small vertical spacing between buttons
-                    Vector2 devButtonPosition = buttonPosition + new Vector2(0f, newGameButton.Size.Y + devButtonSpacing);
-
-                    // Create the Dev Servers button with orange tint
-                    var devButton = new MyGuiControlButton(
-                        position: devButtonPosition,
-                        size: newGameButton.Size * new Vector2(0.9f, 1f), // Same size as STC button
-                        text: new StringBuilder("STC Dev Servers"),
-                        onButtonClick: OnDevServersClick,
-                        toolTip: "Connect to development servers (DEVMODE only)",
-                        textScale: newGameButton.TextScale * 0.9f,
-                        visualStyle: newGameButton.VisualStyle,
-                        colorMask: new Color(255, 140, 0) // Orange color for dev environment
-                    );
-
-                    __instance.Controls.Add(devButton);
-                    MyLog.Default.Info("STCLauncher: Dev Servers button added to main menu");
-                }
-            }
-            else
-            {
-                MyLog.Default.Warning("STCLauncher: Could not find New Game button on main menu");
+                position.Y += newGameButton.Size.Y + ButtonSpacing;
+                __instance.Controls.Add(CreateButton(newGameButton, position,
+                    "STC Dev Servers", "Connect to development servers (DEVMODE only)", Color.DarkOrange,
+                    () => new DevServerSelectionDialog()));
             }
         }
         catch (Exception ex)
@@ -106,35 +61,30 @@ internal class MainMenuPatch
         }
     }
 
-    private static void OnStarTrekContinuumClick(MyGuiControlButton sender)
+    /// <summary>Creates a button styled like <paramref name="template"/>, slightly narrower to fit beside it.</summary>
+    private static MyGuiControlButton CreateButton(MyGuiControlButton template, Vector2 position, string text,
+        string toolTip, Vector4 colorMask, Func<MyGuiScreenBase> createDialog)
+    {
+        return new MyGuiControlButton(
+            position: position,
+            size: template.Size * new Vector2(0.9f, 1f),
+            text: new StringBuilder(text),
+            onButtonClick: _ => OpenDialog(createDialog),
+            toolTip: toolTip,
+            textScale: template.TextScale * 0.9f,
+            visualStyle: template.VisualStyle,
+            colorMask: colorMask);
+    }
+
+    private static void OpenDialog(Func<MyGuiScreenBase> createDialog)
     {
         try
         {
-            MyLog.Default.Info("STCLauncher: STC button clicked, opening server selection dialog");
-            // Open the server selection dialog
-            var dialog = new ServerSelectionDialog();
-            MyGuiSandbox.AddScreen(dialog);
-            MyLog.Default.Info("STCLauncher: Server selection dialog added to screen");
+            MyGuiSandbox.AddScreen(createDialog());
         }
         catch (Exception ex)
         {
             MyLog.Default.Error($"STCLauncher: Error opening server selection dialog: {ex}");
-        }
-    }
-
-    private static void OnDevServersClick(MyGuiControlButton sender)
-    {
-        try
-        {
-            MyLog.Default.Info("STCLauncher: Dev Servers button clicked, opening dev server selection dialog");
-            // Open the development server selection dialog
-            var dialog = new DevServerSelectionDialog();
-            MyGuiSandbox.AddScreen(dialog);
-            MyLog.Default.Info("STCLauncher: Dev server selection dialog added to screen");
-        }
-        catch (Exception ex)
-        {
-            MyLog.Default.Error($"STCLauncher: Error opening dev server selection dialog: {ex}");
         }
     }
 }

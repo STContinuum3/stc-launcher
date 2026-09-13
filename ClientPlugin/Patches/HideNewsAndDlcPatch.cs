@@ -24,9 +24,6 @@ namespace ClientPlugin.Patches;
 [HarmonyPatch(typeof(MyGuiScreenMainMenu), "CreateRightSection")]
 internal static class HideNewsAndDlcPatch
 {
-    private static bool Prefix()
-    {
-        // Returning false skips the original, so none of the right hand controls are created.
-        return false;
-    }
+    // Returning false skips the original, so none of the right hand controls are created
+    private static bool Prefix() => false;
 }
