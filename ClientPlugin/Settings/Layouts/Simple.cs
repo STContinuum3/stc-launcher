@@ -54,8 +54,6 @@ internal class Simple : Layout
 
     public override void LayoutControls()
     {
-        var totalWidth = scrollPanel.ScrolledAreaSize.X - 2 * ElementPadding;
-            
         var controls = GetControls();
         var totalHeight = ElementPadding + controls.Select(row => row.Max(c => c.GuiControl.Size.Y) + ElementPadding).Sum();
         parent.Size = new Vector2(parent.Size.X, totalHeight);
@@ -71,17 +69,12 @@ internal class Simple : Layout
             rowY += rowHeight + ElementPadding;
                 
             // Horizontal
-                
-            var totalMinWidth = row.Select(c => c.FixedWidth ?? c.MinWidth).Sum();
-            var remainingWidth = Math.Max(0f, totalWidth - totalMinWidth);
-            var sumFillFactors = row.Select(c => c.FixedWidth.HasValue ? 0f : c.FillFactor ?? 0f).Sum();
-            var unitWidth = sumFillFactors > 0f ? remainingWidth / sumFillFactors : 0f;
 
             var controlX = -0.5f * parent.Size.X + ElementPadding;
             foreach (var control in row)
             {
                 var guiControl = control.GuiControl;
-                guiControl.Position = new Vector2(controlX, controlY) + control.Offset;
+                guiControl.Position = new Vector2(controlX, controlY);
                 guiControl.OriginAlign = control.OriginAlign;
 
                 var sizeY = guiControl.Size.Y;
@@ -90,10 +83,6 @@ internal class Simple : Layout
                     guiControl.Size = new Vector2(control.FixedWidth.Value, sizeY);
                     guiControl.SetMaxWidth(control.FixedWidth.Value);
                 }
-                else if (control.FillFactor.HasValue)
-                {
-                    guiControl.Size = new Vector2(Math.Max(control.MinWidth, unitWidth * control.FillFactor.Value), sizeY);
-                } 
                 else
                 {
                     guiControl.Size = new Vector2(Math.Max(guiControl.Size.X, control.MinWidth), sizeY);
