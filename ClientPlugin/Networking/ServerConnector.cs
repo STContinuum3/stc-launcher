@@ -1,7 +1,6 @@
 using Sandbox;
 using Sandbox.Game.Screens;
 using Sandbox.Graphics.GUI;
-using ClientPlugin.GUI;
 using System;
 using System.Text;
 using VRage.Utils;
