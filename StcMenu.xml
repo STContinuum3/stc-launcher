@@ -6,12 +6,12 @@
 
     <RepoId>STContinuum3/stc-launcher</RepoId>
 
-    <FriendlyName>TODO StcMenu</FriendlyName>
-    <Author>TODO Author Name</Author>
-    <Tooltip>TODO Short description</Tooltip>
+    <FriendlyName>Star Trek Continuum 4.1 - Menu System</FriendlyName>
+    <Author>Sargonnas</Author>
+    <Tooltip>Adds STC specific menu items and background video.</Tooltip>
 
     <!-- Shown on the plugin details panel, 1000 characters max. Defaults to the Tooltip. -->
-    <Description>TODO Long description</Description>
+    <Description>Adds STC specific buttons to launch game directly into a sector, adds new background video, removes keen news from main menu.</Description>
 
     <!-- Only source code in these directories is compiled -->
     <SourceDirectories>
