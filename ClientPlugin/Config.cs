@@ -31,7 +31,7 @@ public class Config : INotifyPropertyChanged
     private Color factionThemeColor = Color.Blue;
     private bool autoConnectToLastServer = false;
     private Binding quickConnectKeybind = new Binding(MyKeys.F12);
-    private bool devMode = true;
+    private bool devMode = false;
 
     #endregion
 
