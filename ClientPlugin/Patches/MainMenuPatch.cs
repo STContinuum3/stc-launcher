@@ -17,28 +17,16 @@ internal static class MainMenuPatch
 {
     private const float ButtonSpacing = 0.003f;
 
-    private static void Postfix(MyGuiScreenMainMenu __instance, bool constructor)
+    // Runs on every rebuild, not just construction: resolution, language and control option
+    // changes call RecreateControls(false), which clears all controls before this postfix.
+    private static void Postfix(MyGuiScreenMainMenu __instance)
     {
         try
         {
-            if (!constructor)
-                return;
-
-            MyGuiControlButton newGameButton = null;
-            foreach (var control in __instance.Controls.GetVisibleControls())
-            {
-                if (control is MyGuiControlButton button && button.Text != null &&
-                    (button.Text.ToString().Contains("New Game") ||
-                     button.Text.ToString().Contains("NEW GAME") ||
-                     button.Text.ToString().Contains("New World")))
-                {
-                    newGameButton = button;
-                    break;
-                }
-            }
-
-            // The in-game pause menu has no New Game button, so it gets no STC buttons
-            if (newGameButton == null)
+            // Look the button up by the name MyGuiScreenMainMenuBase.MakeButton gives it; its
+            // label is localized. The in-game pause menu has no New Game button, so it gets no
+            // STC buttons.
+            if (__instance.Controls.GetControlByName("NewGame") is not MyGuiControlButton newGameButton)
                 return;
 
             var position = newGameButton.Position + new Vector2(newGameButton.Size.X + ButtonSpacing, 0f);
