@@ -17,20 +17,17 @@ namespace ClientPlugin;
 public class Plugin : IPlugin
 {
     public const string Name = "StcMenu";
-    public static Plugin Instance { get; private set; }
     private SettingsGenerator settingsGenerator;
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
     public void Init(object gameInstance)
     {
-        Instance = this;
-
         VRage.Utils.MyLog.Default.WriteLine($"STCLauncher: Initializing plugin v1.0");
 
         try
         {
             // Initialize settings
-            Instance.settingsGenerator = new SettingsGenerator();
+            settingsGenerator = new SettingsGenerator();
             VRage.Utils.MyLog.Default.WriteLine($"STCLauncher: Settings initialized");
 
             // Apply Harmony patches
@@ -56,8 +53,6 @@ public class Plugin : IPlugin
     {
         // TODO: Save state and close resources here, called when the game exits (not guaranteed!)
         // IMPORTANT: Do NOT call harmony.UnpatchAll() here! It may break other plugins.
-
-        Instance = null;
     }
 
     public void Update()
@@ -68,8 +63,8 @@ public class Plugin : IPlugin
     // ReSharper disable once UnusedMember.Global
     public void OpenConfigDialog()
     {
-        Instance.settingsGenerator.SetLayout<Simple>();
-        MyGuiSandbox.AddScreen(Instance.settingsGenerator.Dialog);
+        settingsGenerator.SetLayout<Simple>();
+        MyGuiSandbox.AddScreen(settingsGenerator.Dialog);
     }
 
     public void LoadAssets(string folder)

@@ -126,26 +126,6 @@ public static class AssetLoader
         }
     }
 
-    public static string GetRandomVideoFile()
-    {
-        try
-        {
-            var videoFiles = GetCustomVideoFiles();
-
-            if (videoFiles.Length == 0)
-                return null;
-
-            // Return a random video file
-            var random = new Random();
-            return videoFiles[random.Next(videoFiles.Length)];
-        }
-        catch (Exception ex)
-        {
-            MyLog.Default.Error($"STCLauncher: Error getting random video file: {ex}");
-            return null;
-        }
-    }
-
     private static void CreateReadmeFile()
     {
         try
@@ -193,23 +173,6 @@ Note: This folder is located at:
         catch (Exception ex)
         {
             MyLog.Default.Error($"STCLauncher: Failed to create README file: {ex}");
-        }
-    }
-
-    public static bool ValidateVideoFile(string filePath)
-    {
-        try
-        {
-            if (!File.Exists(filePath))
-                return false;
-
-            var extension = Path.GetExtension(filePath).ToLowerInvariant();
-            // Only WMV format is supported by Space Engineers
-            return extension == ".wmv";
-        }
-        catch
-        {
-            return false;
         }
     }
 

@@ -50,7 +50,7 @@ internal static class MainMenuBackgroundPatch
     private const float SoundtrackBoost = 1.50f;
 
     private static float SoundtrackVolume =>
-        Math.Min(1f, (MyAudio.Static?.VolumeMusic ?? 0f) * SoundtrackBoost);
+        Math.Min(1f, MyAudio.Static.VolumeMusic * SoundtrackBoost);
 
     [HarmonyPrefix]
     [HarmonyPatch("LoadContent")]
@@ -60,14 +60,14 @@ internal static class MainMenuBackgroundPatch
         // (MyGuiScreenIntroVideo.CreateBackgroundScreen passes it straight through), so this
         // reference check keeps us clear of the startup intro and credits videos, which use
         // their own lists and must not be touched.
-        if (___m_videos == null || !ReferenceEquals(___m_videos, MyPerGameSettings.GUI.MainMenuBackgroundVideos))
+        if (!ReferenceEquals(___m_videos, MyPerGameSettings.GUI.MainMenuBackgroundVideos))
             return;
 
         if (!Config.Current.EnableCustomVideo)
             return;
 
         var videos = AssetLoader.GetCustomVideoFiles();
-        if (videos == null || videos.Length == 0)
+        if (videos.Length == 0)
         {
             MyLog.Default.Warning("STCLauncher: No custom video available, keeping stock menu backgrounds");
             return;
@@ -87,7 +87,7 @@ internal static class MainMenuBackgroundPatch
         // the stock menu track out of its way (see MenuMusicPatch).
         ___m_volume = SoundtrackVolume;
         ActiveScreen = __instance;
-        MyAudio.Static?.StopMusic();
+        MyAudio.Static.StopMusic();
 
         MyLog.Default.Info($"STCLauncher: Main menu background video replaced with {videos[0]} (volume {___m_volume:0.00})");
     }
@@ -112,7 +112,7 @@ internal static class MainMenuBackgroundPatch
         // loops, Loop() -> TryPlayVideo() restarts it at the right level.
         ___m_volume = volume;
 
-        if (___m_videoID != uint.MaxValue && MyRenderProxy.IsVideoValid(___m_videoID))
+        if (MyRenderProxy.IsVideoValid(___m_videoID))
             MyRenderProxy.SetVideoVolume(___m_videoID, volume);
     }
 

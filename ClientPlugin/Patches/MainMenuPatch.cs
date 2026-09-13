@@ -1,11 +1,9 @@
 using HarmonyLib;
 using Sandbox.Graphics.GUI;
 using SpaceEngineers.Game.GUI;
-using ClientPlugin;
 using ClientPlugin.GUI;
 using System;
 using System.Text;
-using VRage.Game;
 using VRage.Utils;
 using VRageMath;
 
