@@ -1,30 +1,19 @@
 <?xml version="1.0"?>
 <PluginData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="GitHubPlugin">
 
-    <!-- The ID of your plugin, never change this -->
+    <!-- The ID of the plugin, never change this -->
     <Id>CC2344F5-02BB-409E-ADE4-2B800DF06D36</Id>
 
-    <!-- GitHub repository ID -->
-    <RepoId>todo-github-user/project-name</RepoId>
+    <RepoId>STContinuum3/stc-launcher</RepoId>
 
-    <!-- The name of your plugin that will appear in the plugin list -->
     <FriendlyName>TODO StcMenu</FriendlyName>
-
-    <!-- The author name that you want to appear in the plugin list -->
     <Author>TODO Author Name</Author>
-
-    <!-- Optional tooltip for the plugin in the plugin list -->
     <Tooltip>TODO Short description</Tooltip>
 
-    <!-- Optional plugin description. If omitted, this will be the same as the Tooltip. 1000 characters max. -->
-    <Description>TODO Long description, multiple lines.
+    <!-- Shown on the plugin details panel, 1000 characters max. Defaults to the Tooltip. -->
+    <Description>TODO Long description</Description>
 
-        This text is shown on the plugin details panel in a scrollable text box.
-
-        You can use links here, players can click on them. For example, add a Discord invite.
-    </Description>
-
-    <!-- Only source code in the Directory entries listed in SourceDirectories is compiled. Exclude any test projects or similar. -->
+    <!-- Only source code in these directories is compiled -->
     <SourceDirectories>
         <Directory>ClientPlugin</Directory>
     </SourceDirectories>
@@ -33,42 +22,7 @@
          resources, so the video ships as an asset: this folder is passed to Plugin.LoadAssets. -->
     <Asset Name="AssetFolder" Path="ClientPlugin/Resources" />
 
-    <!-- To specify a required NuGet package, use either a list of PackageReference tags OR a Config tag.
-    <NuGetReferences>
-      <PackageReference Include="OVRSharp" Version="1.2.0" />
-    </NuGetReferences> 
-    -->
-
-    <!-- Optional tag that specifies what dependencies this plugin has. Dependencies will be automatically enabled when this plugin is enabled.
-    <DependencyIds>
-      <Id>viktor-ferenczi/se-performance-improvements</Id>
-    </DependencyIds> 
-    -->
-
-    <!-- Optional tag that restricts the plugin to specific runtimes (case sensitive: NETFramework, NETCoreApp). List multiple, comma separated. If omitted, the runtime is detected from the compiled assembly.
-    <Runtimes>NETFramework,NETCoreApp</Runtimes>
-    -->
-
-    <!-- Optional tag that restricts the plugin to specific platforms (case sensitive: Windows, Linux). List multiple, comma separated. If omitted, the plugin loads on all platforms.
-    <Platforms>Windows,Linux</Platforms>
-    -->
-
-    <!-- Optional tag that specifies whether the plugin is hidden. Hidden plugins only appear when they are enabled or searched for in the search box.
-    <Hidden>true</Hidden>
-    -->
-
-    <!-- The current plugin version's commit hash -->
+    <!-- The released commit hash -->
     <Commit>TODO Git commit hash</Commit>
-
-    <!-- Optional list of alternate versions of the plugin, use it for test or custom builds
-    <AlternateVersions>
-      <Version>
-        <Name>Version Name</Name>
-        <Commit>Commit hash</Commit>
-      </Version>
-    </AlternateVersions> 
-    -->
-    
-    <!-- Feel free to delete the comments and the commented out optional blocks once you're done. -->
 
 </PluginData>
