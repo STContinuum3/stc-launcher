@@ -1,5 +1,4 @@
 using System.IO;
-using VRage.Utils;
 
 namespace ClientPlugin.Assets;
 
@@ -23,11 +22,11 @@ public static class AssetLoader
         var path = Path.Combine(folder, VideoFileName);
         if (!File.Exists(path))
         {
-            MyLog.Default.Warning($"STCLauncher: Background video not found in asset folder: {path}");
+            Log.Warning($"Background video not found in asset folder: {path}");
             return;
         }
 
         VideoPath = path;
-        MyLog.Default.Info($"STCLauncher: Background video: {path}");
+        Log.Info($"Background video: {path}");
     }
 }

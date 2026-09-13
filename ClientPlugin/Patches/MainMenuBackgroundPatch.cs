@@ -6,7 +6,6 @@ using Sandbox.Game.Screens;
 using Sandbox.Graphics.GUI;
 using System;
 using VRage.Audio;
-using VRage.Utils;
 using VRageRender;
 
 namespace ClientPlugin.Patches;
@@ -20,9 +19,9 @@ namespace ClientPlugin.Patches;
 /// other part of the job - looping, the menu overlay, transitions and cleanup - to the game.
 ///
 /// Why here rather than assigning MyPerGameSettings.GUI.MainMenuBackgroundVideos during
-/// Plugin.Init: under Pulsar the plugin is initialised BEFORE
-/// SpaceEngineersGame.SetupPerGameSettings() runs, so that field is overwritten with the 13
-/// stock videos immediately afterwards. Patching LoadContent has no ordering dependency.
+/// Plugin.Init: the menu background screen can be created before plugins are initialised
+/// (MySandboxGame.Initialize queues the main menu when the intro logos are off) and keeps its
+/// own reference to the stock array. Patching LoadContent has no ordering dependency.
 ///
 /// Why not patch MyGuiScreenMainMenu.AddIntroScreen: it is a two-line private method called
 /// straight from the MyGuiScreenMainMenu constructor, so the JIT inlines it and a prefix on
@@ -69,7 +68,7 @@ internal static class MainMenuBackgroundPatch
         var videoPath = AssetLoader.VideoPath;
         if (videoPath == null)
         {
-            MyLog.Default.Warning("STCLauncher: No custom video available, keeping stock menu backgrounds");
+            Log.Warning("No custom video available, keeping stock menu backgrounds");
             return;
         }
 
@@ -83,13 +82,13 @@ internal static class MainMenuBackgroundPatch
         __instance.ShowPictures = false;
 
         // CreateBackgroundScreen hardcodes volume 0 because stock menu videos are silent
-        // wallpaper. Ours has a soundtrack, so play it at the player's music volume and keep
+        // wallpaper. Ours has a soundtrack, so play it at the boosted music volume and keep
         // the stock menu track out of its way (see MenuMusicPatch).
         ___m_volume = SoundtrackVolume;
         ActiveScreen = __instance;
         MyAudio.Static.StopMusic();
 
-        MyLog.Default.Info($"STCLauncher: Main menu background video replaced with {videoPath} (volume {___m_volume:0.00})");
+        Log.Info($"Main menu background video replaced with {videoPath} (volume {___m_volume:0.00})");
     }
 
     [HarmonyPostfix]

@@ -1,6 +1,5 @@
 using ClientPlugin.Networking;
 using System.Collections.Generic;
-using VRage.Utils;
 using VRageMath;
 
 namespace ClientPlugin.GUI;
@@ -34,7 +33,7 @@ public class DevServerSelectionDialog() : ServerDialogBase(new Vector2(0.5f, 0.7
 
     protected override void OnServerClick(ServerInfo server)
     {
-        MyLog.Default.Info($"STCLauncher: Connecting to development server {server.Name}");
+        Log.Info($"Connecting to development server {server.Name}");
         base.OnServerClick(server);
     }
 }

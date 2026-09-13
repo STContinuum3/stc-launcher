@@ -100,7 +100,7 @@ public abstract class ServerDialogBase : MyGuiScreenBase
         }
         catch (Exception ex)
         {
-            MyLog.Default.Error($"STCLauncher: Error connecting to {DisplayName(server)}: {ex}");
+            Log.Error($"Error connecting to {DisplayName(server)}: {ex}");
 
             MyGuiSandbox.AddScreen(MyGuiSandbox.CreateMessageBox(
                 MyMessageBoxStyleEnum.Error,

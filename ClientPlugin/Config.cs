@@ -8,7 +8,7 @@ public class Config
 {
     public static readonly Config Current = ConfigStorage.Load();
 
-    public readonly string Title = "STC Launcher Settings";
+    public readonly string Title = "STC Menu Settings";
 
     [Checkbox(description: "Enable custom Star Trek background video")]
     public bool EnableCustomVideo { get; set; } = true;

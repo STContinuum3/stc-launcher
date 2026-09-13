@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 using VRage.FileSystem;
-using VRage.Utils;
 
 namespace ClientPlugin.Settings;
 
@@ -35,7 +34,7 @@ public static class ConfigStorage
         }
         catch (Exception)
         {
-            MyLog.Default.Warning($"{ConfigFileName}: Failed to read config file: {ConfigFilePath}");
+            Log.Warning($"Failed to read config file: {ConfigFilePath}");
         }
 
         return new Config();

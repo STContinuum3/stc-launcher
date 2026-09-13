@@ -4,7 +4,6 @@ using SpaceEngineers.Game.GUI;
 using ClientPlugin.GUI;
 using System;
 using System.Text;
-using VRage.Utils;
 using VRageMath;
 
 namespace ClientPlugin.Patches;
@@ -57,7 +56,7 @@ internal static class MainMenuPatch
         }
         catch (Exception ex)
         {
-            MyLog.Default.Error($"STCLauncher: Error adding main menu button: {ex}");
+            Log.Error($"Error adding main menu button: {ex}");
         }
     }
 
@@ -84,7 +83,7 @@ internal static class MainMenuPatch
         }
         catch (Exception ex)
         {
-            MyLog.Default.Error($"STCLauncher: Error opening server selection dialog: {ex}");
+            Log.Error($"Error opening server selection dialog: {ex}");
         }
     }
 }
