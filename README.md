@@ -7,9 +7,11 @@ Space Engineers client plugin for Star Trek Continuum, loaded by [Pulsar](https:
   **STC Dev Servers** button opens the development servers.
 - Replaces the main menu background with the Star Trek Continuum video and plays its soundtrack
   instead of the stock menu track, following the music volume slider.
-- Hides the main menu news panel and DLC banners. The Newsletter button stays.
+- Hides the main menu news panel, DLC banners and Newsletter button. Players who want Keen's
+  newsletter reward blocks can turn off **Hide menu news** to get the Newsletter button back.
 
-Settings (Pulsar plugin list → StcMenu → config): **Enable custom video**, **Dev mode**.
+Settings (Pulsar plugin list → StcMenu → config): **Enable custom video**, **Hide menu news**,
+**Dev mode**. Changes apply to the main menu when the settings dialog closes.
 
 ## Network access
 

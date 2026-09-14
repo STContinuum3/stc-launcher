@@ -42,17 +42,29 @@ internal static class MainMenuPatch
     }
 
     /// <summary>
-    /// Adds or removes the STC Dev Servers button on the open main menu to match the Dev mode
-    /// setting. Called when the settings dialog closes, so the change shows without waiting for
-    /// a menu rebuild. Touches only that button: a full RecreateControls would also restart the
-    /// news download and rerun the menu's startup checks.
+    /// Brings the open main menu in line with the settings. Called when the settings dialog
+    /// closes, so changes show without waiting for a menu rebuild.
+    ///
+    /// A Hide menu news change needs a rebuild, because only CreateRightSection can create the
+    /// news controls again; the rebuild also re-adds the STC buttons. A Dev mode change alone
+    /// adds or removes just that button, since RecreateControls also restarts the news download
+    /// and reruns the menu's startup checks.
     /// </summary>
-    internal static void RefreshDevButton()
+    internal static void ApplySettings()
     {
         try
         {
             var menu = MyScreenManager.GetFirstScreenOfType<MyGuiScreenMainMenu>();
-            if (menu is not { IsLoaded: true } || FindNewGameButton(menu) is not { } newGameButton)
+            if (menu is not { IsLoaded: true })
+                return;
+
+            if (HideMenuNewsPatch.IsApplied(menu) != Config.Current.HideMenuNews)
+            {
+                menu.RecreateControls(false);
+                return;
+            }
+
+            if (FindNewGameButton(menu) is not { } newGameButton)
                 return;
 
             var devButton = menu.Controls.GetControlByName(DevServersButtonName);
@@ -63,7 +75,7 @@ internal static class MainMenuPatch
         }
         catch (Exception ex)
         {
-            Log.Error($"Error updating the dev servers button: {ex}");
+            Log.Error($"Error applying settings to the main menu: {ex}");
         }
     }
 

@@ -13,11 +13,11 @@
     <!-- Shown on the plugin details panel, 1000 characters max. Defaults to the Tooltip. -->
     <Description>Main menu integration for the Star Trek Continuum (STC) servers.
 
-- Adds an STC Servers button next to New Game. It lists the STC servers, and picking one opens the game's Direct Connect screen with that server's address filled in. With Dev mode on, an STC Dev Servers button lists the development servers.
-- Replaces the main menu background with an STC video and plays its soundtrack in place of the stock menu music, following the music volume slider. Turn off Enable custom video in the plugin settings to keep the stock background and music.
-- Hides the Keen news panel and the DLC banners. The Newsletter button stays.
+- Adds an STC Servers button next to New Game. Picking a server opens the game's Direct Connect screen with its address filled in. With Dev mode on, an STC Dev Servers button lists the development servers.
+- Replaces the main menu background with an STC video whose soundtrack replaces the stock menu music and follows the music volume slider. Turn off Enable custom video in the settings to keep the stock background and music.
+- Hides the Keen news panel, DLC banners and Newsletter button. Turn off Hide menu news in the settings to show them, for example to subscribe to the newsletter for its reward blocks.
 
-Network: downloads the background video (about 12 MB) from this repository's GitHub releases as a plugin asset, and the server list (servers.json) from raw.githubusercontent.com once per launch.
+Network: downloads the background video (about 12 MB) from this repository's GitHub releases, and the server list (servers.json) from raw.githubusercontent.com once per launch.
 
 Video footage by Star Trek Continuum members, soundtrack by siege3581. The media is not covered by the MIT licence.</Description>
 
