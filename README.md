@@ -90,8 +90,12 @@ to make it fetch a new one on the next start.
 
 ## Updating the video
 
-1. Encode the new video as WMV (the game plays menu videos through DirectShow). Keep it small:
-   Pulsar allows 30 seconds for the whole download, so aim for a zip of 15 MB or less.
+1. Encode it with [`tools/Encode-MenuVideo.ps1`](tools/Encode-MenuVideo.ps1) in Windows
+   PowerShell 5.1, which uses Windows' own transcoder to write WMV3 video and WMA audio.
+   - The game plays menu videos through DirectShow's WM ASF Reader. WMV files written by ffmpeg
+     load without an error but stall on the first frame when they have an audio track, so do not
+     encode or remux the video with ffmpeg.
+   - Keep it small: Pulsar allows 30 seconds for the whole download, so aim for a zip of 15 MB or less.
 2. Zip it with `star_trek_background.wmv` at the root of the archive, as `stc-menu-video-vN.zip`.
 3. Test it before publishing: copy `StcMenu.xml` to `StcMenu.local.xml` (ignored by git), change
    its asset to `<Asset Name="AssetFolder" Path="stc-menu-video-vN.zip" Extract="true" />` with

@@ -17,7 +17,7 @@
 - Replaces the main menu background with an STC video and plays its soundtrack in place of the stock menu music, following the music volume slider. Turn off Enable custom video in the plugin settings to keep the stock background and music.
 - Hides the Keen news panel and the DLC banners. The Newsletter button stays.
 
-Network: downloads the background video (about 10 MB) from this repository's GitHub releases as a plugin asset, and the server list (servers.json) from raw.githubusercontent.com once per launch.
+Network: downloads the background video (about 12 MB) from this repository's GitHub releases as a plugin asset, and the server list (servers.json) from raw.githubusercontent.com once per launch.
 
 Video footage by Star Trek Continuum members, soundtrack by siege3581. The media is not covered by the MIT licence.</Description>
 
@@ -31,7 +31,7 @@ Video footage by Star Trek Continuum members, soundtrack by siege3581. The media
          Plugin.LoadAssets. A new video needs a new release and a new Url and Sha256 here. -->
     <Asset Name="AssetFolder"
            Url="https://github.com/STContinuum3/stc-launcher/releases/download/media-v1/stc-menu-video-v1.zip"
-           Sha256="633aa93ced53283af413485cef6cdb695cb0480051fdd585edeb9ae8cf26cf14"
+           Sha256="66f6b93082667e4a46052cbb95539501e03b122b50092f1b87a5ffd7322d9973"
            Extract="true" />
 
     <!-- The commit whose source Pulsar downloads and compiles. A Pulsar "Remote Plugin" source reads
