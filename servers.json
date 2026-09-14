@@ -1,0 +1,16 @@
+{
+  "Lobby": { "Name": "Lobby", "Address": "142.127.79.145", "Port": 27269, "Color": "#00FFFF" },
+  "Live": [
+    { "Name": "Federation 1", "Address": "142.127.79.145", "Port": 27261, "Color": "#0000FF" },
+    { "Name": "Federation 2", "Address": "142.127.79.145", "Port": 27262, "Color": "#0000FF" },
+    { "Name": "Klingon 1", "Address": "142.127.79.145", "Port": 27263, "Color": "#FF0000" },
+    { "Name": "Klingon 2", "Address": "142.127.79.145", "Port": 27264, "Color": "#FF0000" },
+    { "Name": "Deep Space", "Address": "142.127.79.145", "Port": 27268, "Color": "#800080" }
+  ],
+  "Dev": [
+    { "Name": "Dev Lobby", "Address": "142.127.79.145", "Port": 27900, "Color": "#FFA500" },
+    { "Name": "Dev Fed 1", "Address": "142.127.79.145", "Port": 27901, "Color": "#FFA500" },
+    { "Name": "Dev Fed 2", "Address": "142.127.79.145", "Port": 27902, "Color": "#FFA500" },
+    { "Name": "Dev Deep Space", "Address": "142.127.79.145", "Port": 27903, "Color": "#FFA500" }
+  ]
+}

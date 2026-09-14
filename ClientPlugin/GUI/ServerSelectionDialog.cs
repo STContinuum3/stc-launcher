@@ -23,8 +23,9 @@ public class ServerSelectionDialog() : ServerDialogBase(new Vector2(0.6f, 0.8f))
         AddLabel(-0.26f, "Select a server to connect to:", 0.9f, Color.LightGray);
 
         // Lobby centered above a two column grid of the live servers
-        AddServerButton(StcServers.Lobby, new Vector2(0f, -0.185f), 0.35f);
-        var gridBottom = AddServerGrid(StcServers.Live, top: -0.055f, width: 0.22f, columns: 2, columnSpacing: 0.24f);
+        var servers = StcServers.Current;
+        AddServerButton(servers.Lobby, new Vector2(0f, -0.185f), 0.35f);
+        var gridBottom = AddServerGrid(servers.Live, top: -0.055f, width: 0.22f, columns: 2, columnSpacing: 0.24f);
 
         AddCloseButton(gridBottom);
     }

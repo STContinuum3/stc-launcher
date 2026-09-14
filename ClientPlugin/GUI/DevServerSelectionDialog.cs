@@ -26,7 +26,7 @@ public class DevServerSelectionDialog() : ServerDialogBase(new Vector2(0.5f, 0.7
         AddLabel(-0.235f, "⚠ FOR TESTING ONLY ⚠", 0.9f, Color.OrangeRed);
         AddLabel(-0.18f, "Select a development server:", 0.9f, Color.LightGray);
 
-        var listBottom = AddServerGrid(StcServers.Dev, top: -0.09f, width: 0.35f);
+        var listBottom = AddServerGrid(StcServers.Current.Dev, top: -0.09f, width: 0.35f);
 
         AddCloseButton(listBottom);
     }
