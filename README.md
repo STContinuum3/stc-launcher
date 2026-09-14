@@ -82,6 +82,12 @@ development folder:
 Do not also load a copy of `StcMenu.dll` from Pulsar's `Local` folder, or every patch is
 applied twice.
 
+To test a pushed branch exactly as PluginHub builds it, add it in **Sources** as a remote
+plugin with `StcMenu.xml`. Pulsar reads the XML from the branch but compiles the commit in its
+`<Commit>`, so set that to a pushed commit containing the code under test. Pulsar also caches
+the XML for two hours; delete `%AppData%\Pulsar\Legacy\Sources\Plugins\STContinuum3-stc-launcher.bin`
+to make it fetch a new one on the next start.
+
 ## Updating the video
 
 1. Encode the new video as WMV (the game plays menu videos through DirectShow). Keep it small:

@@ -34,7 +34,9 @@ Video footage by Star Trek Continuum members, soundtrack by siege3581. The media
            Sha256="633aa93ced53283af413485cef6cdb695cb0480051fdd585edeb9ae8cf26cf14"
            Extract="true" />
 
-    <!-- The released commit hash -->
-    <Commit>TODO Git commit hash</Commit>
+    <!-- The commit whose source Pulsar downloads and compiles. A Pulsar "Remote Plugin" source reads
+         this file from its branch but still builds this commit, so update it after pushing code
+         changes. The PluginHub registry copy pins its own reviewed commit. -->
+    <Commit>bc4013dd2964dd021d57cfe275da6089496cde99</Commit>
 
 </PluginData>
