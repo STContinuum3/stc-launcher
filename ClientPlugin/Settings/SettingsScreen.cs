@@ -40,6 +40,7 @@ internal class SettingsScreen : MyGuiScreenBase
     public override void OnRemoved()
     {
         ConfigStorage.Save(Config.Current);
+        Patches.MainMenuPatch.RefreshDevButton();
         base.OnRemoved();
     }
 
