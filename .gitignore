@@ -359,3 +359,9 @@ MigrationBackup/
 
 # Claude Code
 .claude
+
+# Menu background video: ships as a GitHub release asset (see README), not in the repo
+*.wmv
+stc-menu-video-*.zip
+# Local Pulsar data file for testing a video before it is released (see README)
+StcMenu.local.xml

@@ -30,6 +30,16 @@ public class Plugin : IPlugin
         {
             Log.Error($"Error during initialization: {ex}");
         }
+
+        // Separate from the patches above: a failed download only leaves the built-in server list
+        try
+        {
+            Networking.StcServers.Refresh();
+        }
+        catch (System.Exception ex)
+        {
+            Log.Warning($"Could not start the server list download: {ex}");
+        }
     }
 
     public void Dispose()

@@ -33,6 +33,9 @@ internal static class MainMenuBackgroundPatch
     /// <summary>The background screen running our video, or null when the stock one is up.</summary>
     internal static MyGuiScreenIntroVideo ActiveScreen;
 
+    /// <summary>The video list we swap in, kept so a reload of the same screen is still recognised.</summary>
+    private static string[] replacementVideos;
+
     /// <summary>
     /// How much louder than the music slider to play the video's soundtrack.
     ///
@@ -58,12 +61,20 @@ internal static class MainMenuBackgroundPatch
         // Only the menu background screen is built from MyPerGameSettings' array
         // (MyGuiScreenIntroVideo.CreateBackgroundScreen passes it straight through), so this
         // reference check keeps us clear of the startup intro and credits videos, which use
-        // their own lists and must not be touched.
-        if (!ReferenceEquals(___m_videos, MyPerGameSettings.GUI.MainMenuBackgroundVideos))
+        // their own lists and must not be touched. The screen keeps our array after the first
+        // load, so recognise that too: if its content were ever reloaded without closing, the
+        // video would otherwise stop following the music slider.
+        var stockVideos = MyPerGameSettings.GUI.MainMenuBackgroundVideos;
+        var isReload = replacementVideos != null && ReferenceEquals(___m_videos, replacementVideos);
+        if (!isReload && !ReferenceEquals(___m_videos, stockVideos))
             return;
 
         if (!Config.Current.EnableCustomVideo)
+        {
+            if (isReload)
+                ___m_videos = stockVideos;
             return;
+        }
 
         var videoPath = AssetLoader.VideoPath;
         if (videoPath == null)
@@ -74,7 +85,8 @@ internal static class MainMenuBackgroundPatch
 
         // TryPlayVideo does Path.Combine(ContentPath, entry), which returns the entry
         // unchanged when it is already rooted - so our absolute path works.
-        ___m_videos = new[] { videoPath };
+        replacementVideos ??= new[] { videoPath };
+        ___m_videos = replacementVideos;
 
         // While ShowPictures is set the screen draws static loading images and never calls
         // TryPlayVideo. The game turns it on for Steam Deck; force it off so the video plays
@@ -115,6 +127,12 @@ internal static class MainMenuBackgroundPatch
             MyRenderProxy.SetVideoVolume(___m_videoID, volume);
     }
 
+    // UnloadContent is the one teardown step that runs however the screen goes away: a normal
+    // close (CloseScreenNow), MyScreenManager.RemoveAllScreensExcept when a session starts, and
+    // shutdown. OnClosed and the Closed event are skipped by RemoveAllScreensExcept, so clearing
+    // there would leave ActiveScreen pointing at a dead screen and MenuMusicPatch holding back
+    // the stock menu track. A reload of the same screen sets ActiveScreen again in
+    // LoadContentPrefix.
     [HarmonyPostfix]
     [HarmonyPatch("UnloadContent")]
     private static void UnloadContentPostfix(MyGuiScreenIntroVideo __instance)

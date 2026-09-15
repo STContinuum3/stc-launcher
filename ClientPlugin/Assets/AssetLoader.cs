@@ -5,10 +5,11 @@ namespace ClientPlugin.Assets;
 /// <summary>
 /// Locates the main menu background video, which ships as a Pulsar asset.
 ///
-/// StcMenu.xml declares ClientPlugin/Resources as the reserved "AssetFolder" asset. Pulsar
-/// copies that folder into its plugin cache (PluginHub) or resolves it in place (development
-/// folder), then passes the folder to Plugin.LoadAssets before Plugin.Init. Pulsar compiles
-/// plugins from source without embedded resources, so this is the only way to ship the video.
+/// StcMenu.xml declares the reserved "AssetFolder" asset as a zip on the repository's GitHub
+/// releases. Pulsar downloads it into its plugin cache, verifies its SHA-256, extracts it and
+/// passes the extracted folder to Plugin.LoadAssets before Plugin.Init. Pulsar compiles plugins
+/// from source without embedded resources, and the video is kept out of the repository so the
+/// source download stays small.
 /// </summary>
 public static class AssetLoader
 {
